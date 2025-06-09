@@ -1,0 +1,98 @@
+/* Shared CSS for XCeleration site */
+:root {
+    --primary: #E2572B;
+    --background: #FFFDFF;
+    --dark: #212227;
+    --medium: #606060;
+}
+html, body {
+    background: var(--background);
+    color: var(--dark);
+    font-family: 'Roboto', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+header {
+    background: var(--primary);
+    color: #fff;
+    padding: 2.2rem 0 1.2rem 0;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(226,87,43,0.07);
+}
+header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0 0 0.3rem 0;
+    letter-spacing: 1px;
+}
+nav {
+    text-align: center;
+    margin: 1.2rem 0;
+}
+.nav-link {
+    color: var(--primary);
+    text-decoration: none;
+    margin: 0 1.2rem;
+    font-weight: 500;
+}
+.nav-link:hover {
+    text-decoration: underline;
+}
+.tagline {
+    font-size: 1.18rem;
+    color: var(--medium);
+    background: #fff4ef;
+    margin: 0 auto 2.2rem auto;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-style: italic;
+    text-align: center;
+    max-width: 540px;
+    box-shadow: 0 1px 6px rgba(226,87,43,0.04);
+    display: block;
+    margin: 0 auto;
+
+}
+main {
+    max-width: 520px;
+    margin: 3.5rem auto 0 auto;
+    padding: 2.5rem 2rem 2rem 2rem;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 2px 16px rgba(33,34,39,0.07);
+    text-align: center;
+}
+h2 {
+    color: var(--primary);
+    font-size: 1.3rem;
+    margin-bottom: 1.1rem;
+    font-weight: 700;
+}
+ul.features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+}
+ul.features li {
+    margin-bottom: 0.8em;
+    font-size: 1.08rem;
+    color: var(--dark);
+}
+.contact-link {
+    color: var(--primary);
+    text-decoration: underline;
+    font-weight: 500;
+}
+footer {
+    text-align: center;
+    padding: 1.2rem 0 1.2rem 0;
+    background: var(--primary);
+    color: #fff;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    margin-top: 3rem;
+}
+@media (max-width: 600px) {
+    main { padding: 1.3rem 0.5rem; }
+}
