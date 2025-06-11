@@ -259,7 +259,7 @@
             }
         }
 
-        document.addEventListener('load', () => {
+        document.addEventListener('DOMContentLoaded', () => {
             const apiScript = document.createElement('script');
             const pickerScript = document.createElement('script');
             apiScript.src = 'https://apis.google.com/js/api.js';
