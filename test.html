@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Picker API Test</title>
+    <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
+    <script type="text/javascript" src="https://apis.google.com/js/picker.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -87,9 +89,6 @@
             <label for="apiKey">API Key:</label>
             <input type="text" id="apiKey" placeholder="Enter your Google API key here">
             
-            <label for="clientId">OAuth Client ID:</label>
-            <input type="text" id="clientId" placeholder="Enter your OAuth 2.0 Client ID here">
-            
             <label for="accessToken">Access Token (Manual):</label>
             <input type="text" id="accessToken" placeholder="Enter your Access Token here">
             
@@ -110,7 +109,6 @@
 
     <script>
         let apiKey = '';
-        let clientId = '';
         let accessToken = '';
         let gapi_loaded = false;
         let picker_loaded = false;
@@ -118,16 +116,13 @@
         // Load saved config
         function loadConfig() {
             apiKey = localStorage.getItem('test_api_key') || '';
-            clientId = localStorage.getItem('test_client_id') || '';
             accessToken = localStorage.getItem('test_access_token') || '';
             document.getElementById('apiKey').value = apiKey;
-            document.getElementById('clientId').value = clientId;
             document.getElementById('accessToken').value = accessToken;
         }
 
         function saveConfig() {
             apiKey = document.getElementById('apiKey').value.trim();
-            clientId = document.getElementById('clientId').value.trim();
             accessToken = document.getElementById('accessToken').value.trim();
             
             if (!apiKey) {
@@ -136,7 +131,6 @@
             }
             
             localStorage.setItem('test_api_key', apiKey);
-            localStorage.setItem('test_client_id', clientId);
             localStorage.setItem('test_access_token', accessToken);
             
             showStatus('Configuration saved! Now test your API key.', 'success');
@@ -272,8 +266,27 @@
             }
 
             log('🎯 Creating Google Picker...');
-            showStatus('Opening Google Picker...', 'info');
-
+            showStatus('Loading Picker API...', 'info');
+            
+            // Make sure the picker API is loaded
+            if (typeof google === 'undefined' || typeof google.picker === 'undefined') {
+                log('Loading Google Picker API...');
+                gapi.load('picker', {
+                    callback: function() {
+                        log('✅ Google Picker API loaded');
+                        createPicker();
+                    },
+                    onerror: function() {
+                        log('❌ Failed to load Google Picker API');
+                        showStatus('Failed to load Google Picker API', 'error');
+                    }
+                });
+            } else {
+                createPicker();
+            }
+        }
+        
+        function createPicker() {
             try {
                 const view = new google.picker.DocsView(google.picker.ViewId.SPREADSHEETS)
                     .setIncludeFolders(true);
@@ -288,6 +301,7 @@
 
                 picker.setVisible(true);
                 log('✅ Picker created and shown!');
+                showStatus('Picker opened successfully!', 'success');
 
             } catch (error) {
                 log('❌ Picker error: ' + error.message);
