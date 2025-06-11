@@ -122,9 +122,9 @@
         // Hardcoded credentials from your .env file
         const DEVELOPER_KEY = 'AIzaSyBBtRX5-89QQrrT1rd3BDxKZwVFJ1ocvrw'; 
         const ACCESS_TOKEN = 'ya29.a0AW4XtxjOww695BLzGi7g1wUuUtjC7H7oLsAk1S51CKniQ5nh9O-evlIkgqszItETbE8Uei2FOK6nWrylIPfOmH6r-OW3tA39bGlnz6uWi3kOW6Qiwsmq6pzah9TGKDCj0YbWdJfG0qfdhLYHcPZBnUM8vmEgn6ZPBwac4p38aCgYKAf4SARUSFQHGX2MiQJHeVLaY6RA8c_5qCpw77w0175'; 
-
-        // Using window globals now defined in the head
         let access_token = null;
+        let gapi_loaded = false;
+        let picker_loaded = false;
 
         function updateStatus(icon, title, message, type = 'loading') {
             const widget = document.getElementById('statusWidget');
