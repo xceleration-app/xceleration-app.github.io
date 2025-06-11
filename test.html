@@ -4,6 +4,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Drive Picker</title>
+    <script>
+        // Define these functions before loading the scripts
+        function onGapiLoad() {
+            window.gapi_loaded = true;
+            if (window.picker_loaded) {
+                initializeApp();
+            }
+        }
+
+        function onPickerLoad() {
+            window.picker_loaded = true;
+            if (window.gapi_loaded) {
+                initializeApp();
+            }
+        }
+
+        function initializeApp() {
+            initializeGAPI();
+        }
+    </script>
     <script type="text/javascript" src="https://apis.google.com/js/api.js" onload="onGapiLoad()"></script>
     <script type="text/javascript" src="https://apis.google.com/js/picker.js" onload="onPickerLoad()"></script>
     <style>
@@ -121,12 +141,11 @@
     </div>
 
     <script>
-        // Configuration - Replace these with your actual credentials
-        const DEVELOPER_KEY = process.env.DEVELOPER_KEY; // Your Google API key
-        const ACCESS_TOKEN = process.env.ACCESS_TOKEN; // Your OAuth access token
+        // Hardcoded credentials from your .env file
+        const DEVELOPER_KEY = 'AIzaSyBBtRX5-89QQrrT1rd3BDxKZwVFJ1ocvrw'; 
+        const ACCESS_TOKEN = 'ya29.a0AW4XtxjOww695BLzGi7g1wUuUtjC7H7oLsAk1S51CKniQ5nh9O-evlIkgqszItETbE8Uei2FOK6nWrylIPfOmH6r-OW3tA39bGlnz6uWi3kOW6Qiwsmq6pzah9TGKDCj0YbWdJfG0qfdhLYHcPZBnUM8vmEgn6ZPBwac4p38aCgYKAf4SARUSFQHGX2MiQJHeVLaY6RA8c_5qCpw77w0175'; 
 
-        let gapi_loaded = false;
-        let picker_loaded = false;
+        // Using window globals now defined in the head
         let access_token = null;
 
         function updateStatus(icon, title, message, type = 'loading') {
@@ -149,19 +168,7 @@
             }
         }
 
-        function onGapiLoad() {
-            gapi_loaded = true;
-            if (picker_loaded) {
-                initializeApp();
-            }
-        }
-
-        function onPickerLoad() {
-            picker_loaded = true;
-            if (gapi_loaded) {
-                initializeApp();
-            }
-        }
+        // Original onGapiLoad and onPickerLoad functions moved to head
 
         function initializeGAPI() {
             if (!DEVELOPER_KEY || DEVELOPER_KEY === 'YOUR_API_KEY_HERE') {
@@ -181,7 +188,6 @@
                 access_token = ACCESS_TOKEN;
                 
                 // Mark as loaded
-                gapi_loaded = true;
                 
                 updateStatus('✅', 'Ready', 'Click below to select files from Google Drive', 'ready');
 
@@ -253,10 +259,7 @@
             }
         }
 
-        function initializeApp() {
-            // This function is called when both API scripts have loaded
-            initializeGAPI();
-        }
+        // initializeApp function now defined in the head
     </script>
 </body>
 </html>
