@@ -206,25 +206,30 @@
             updateStatus('📁', 'Opening', 'Loading file picker...', 'loading');
 
             try {
-                const view = new google.picker.DocsView(google.picker.ViewId.DOCS)
-                    .setIncludeFolders(true)
-                    .setSelectFolderEnabled(false);
+                // Create a custom view for spreadsheets, CSV, and XLSX files
+                const spreadsheetView = new google.picker.DocsView()
+                    // .setIncludeFolders(true)
+                    .setMimeTypes('application/vnd.google-apps.spreadsheet,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv');
+                    // .setSelectFolderEnabled(false);
+                
+                // Also add the standard spreadsheets view
+                const nativeSpreadsheetView = new google.picker.DocsView(google.picker.ViewId.SPREADSHEETS);
+                    // .setIncludeFolders(true)
+                    // .setSelectFolderEnabled(false);
 
-                const spreadsheetView = new google.picker.DocsView(google.picker.ViewId.SPREADSHEETS)
-                    .setIncludeFolders(true);
-
+                // Create picker without multi-select and upload view
                 const picker = new google.picker.PickerBuilder()
-                    .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+                    // No multi-select
                     .setDeveloperKey(DEVELOPER_KEY)
                     .setOAuthToken(access_token)
-                    .addView(view)
+                    .addView(nativeSpreadsheetView)
                     .addView(spreadsheetView)
-                    .addView(new google.picker.DocsUploadView())
+                    // No upload view
                     .setCallback(pickerCallback)
                     .build();
 
                 picker.setVisible(true);
-                updateStatus('📁', 'Picker Open', 'Select your files from Google Drive', 'ready');
+                updateStatus('📁', 'Picker Open', 'Select a spreadsheet file', 'ready');
 
             } catch (error) {
                 console.error('Picker error:', error);
