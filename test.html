@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Picker API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        
+        button {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover { background: #3367d6; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        
+        .config-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        label {
+            display: block;
+            margin: 10px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        .log {
+            background: #000;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Google Picker API Test</h1>
+        <p>This tool will help you test your Google API key and OAuth setup before using it in your Flutter app.</p>
+        
+        <div class="config-section">
+            <h3>📋 Configuration</h3>
+            <label for="apiKey">API Key:</label>
+            <input type="text" id="apiKey" placeholder="Enter your Google API key here">
+            
+            <label for="clientId">OAuth Client ID:</label>
+            <input type="text" id="clientId" placeholder="Enter your OAuth 2.0 Client ID here">
+            
+            <button onclick="saveConfig()">💾 Save Configuration</button>
+        </div>
+        
+        <div id="status"></div>
+        
+        <div>
+            <button onclick="testStep1()">1️⃣ Test API Key</button>
+            <button onclick="testStep2()" id="step2Btn" disabled>2️⃣ Test OAuth Login</button>
+            <button onclick="testStep3()" id="step3Btn" disabled>3️⃣ Open Picker</button>
+            <button onclick="clearLog()">🗑️ Clear Log</button>
+        </div>
+        
+        <div id="log" class="log"></div>
+    </div>
+
+    <script>
+        let apiKey = '';
+        let clientId = '';
+        let accessToken = '';
+        let gapi_loaded = false;
+        let picker_loaded = false;
+
+        // Load saved config
+        function loadConfig() {
+            apiKey = localStorage.getItem('test_api_key') || '';
+            clientId = localStorage.getItem('test_client_id') || '';
+            document.getElementById('apiKey').value = apiKey;
+            document.getElementById('clientId').value = clientId;
+        }
+
+        function saveConfig() {
+            apiKey = document.getElementById('apiKey').value.trim();
+            clientId = document.getElementById('clientId').value.trim();
+            
+            if (!apiKey || !clientId) {
+                showStatus('Please enter both API Key and Client ID', 'error');
+                return;
+            }
+            
+            localStorage.setItem('test_api_key', apiKey);
+            localStorage.setItem('test_client_id', clientId);
+            showStatus('Configuration saved! Now test your API key.', 'success');
+        }
+
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+
+        function showStatus(message, type) {
+            document.getElementById('status').innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        // Step 1: Test API Key
+        async function testStep1() {
+            if (!apiKey) {
+                showStatus('Please enter and save your API key first!', 'error');
+                return;
+            }
+
+            log('🔍 Testing API Key validity...');
+            showStatus('Testing API key...', 'info');
+
+            try {
+                // Test if API key works by calling a simple API
+                const response = await fetch(`https://www.googleapis.com/drive/v3/about?fields=user&key=${apiKey}`);
+                
+                if (response.status === 403) {
+                    const error = await response.json();
+                    log('❌ API Key test failed: ' + JSON.stringify(error));
+                    showStatus('API Key Error: Make sure Google Drive API is enabled and API key is valid', 'error');
+                    return;
+                } else if (response.status === 400) {
+                    // This is actually expected for this endpoint without auth, but means API key is valid
+                    log('✅ API Key is valid (got expected 400 error)');
+                } else if (response.ok) {
+                    log('✅ API Key is valid and working');
+                } else {
+                    log('⚠️ Unexpected response: ' + response.status);
+                }
+
+                // Load Google APIs
+                log('📡 Loading Google APIs...');
+                const script = document.createElement('script');
+                script.src = 'https://apis.google.com/js/api.js';
+                script.onload = () => {
+                    log('✅ Google API script loaded');
+                    gapi.load('auth2:picker', {
+                        callback: () => {
+                            log('✅ Google Auth2 and Picker APIs loaded');
+                            gapi_loaded = true;
+                            document.getElementById('step2Btn').disabled = false;
+                            showStatus('API Key is valid! Now test OAuth login.', 'success');
+                        },
+                        onerror: (error) => {
+                            log('❌ Failed to load Google APIs: ' + JSON.stringify(error));
+                            showStatus('Failed to load Google APIs', 'error');
+                        }
+                    });
+                };
+                script.onerror = () => {
+                    log('❌ Failed to load Google API script');
+                    showStatus('Failed to load Google API script', 'error');
+                };
+                document.head.appendChild(script);
+
+            } catch (error) {
+                log('❌ Error testing API key: ' + error.message);
+                showStatus('Error testing API key: ' + error.message, 'error');
+            }
+        }
+
+        // Step 2: Test OAuth
+        async function testStep2() {
+            if (!gapi_loaded) {
+                showStatus('Please complete Step 1 first!', 'error');
+                return;
+            }
+
+            log('🔐 Initializing OAuth...');
+            showStatus('Initializing OAuth...', 'info');
+
+            try {
+                const authInstance = gapi.auth2.init({
+                    client_id: clientId,
+                    scope: 'https://www.googleapis.com/auth/drive.file'
+                });
+
+                log('🔐 OAuth initialized, signing in...');
+                const user = await authInstance.signIn();
+                
+                if (user.isSignedIn()) {
+                    accessToken = user.getAuthResponse().access_token;
+                    log('✅ OAuth successful! Token length: ' + accessToken.length);
+                    
+                    // Test token
+                    const tokenResponse = await fetch(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`);
+                    const tokenInfo = await tokenResponse.json();
+                    
+                    if (tokenResponse.ok) {
+                        log('✅ Token is valid. Scopes: ' + tokenInfo.scope);
+                        document.getElementById('step3Btn').disabled = false;
+                        showStatus('OAuth successful! Now you can test the picker.', 'success');
+                    } else {
+                        log('❌ Token validation failed: ' + JSON.stringify(tokenInfo));
+                        showStatus('Token validation failed', 'error');
+                    }
+                } else {
+                    log('❌ User not signed in');
+                    showStatus('OAuth sign-in failed', 'error');
+                }
+
+            } catch (error) {
+                log('❌ OAuth error: ' + error.message);
+                showStatus('OAuth error: ' + error.message, 'error');
+            }
+        }
+
+        // Step 3: Test Picker
+        function testStep3() {
+            if (!accessToken) {
+                showStatus('Please complete Step 2 first!', 'error');
+                return;
+            }
+
+            log('🎯 Creating Google Picker...');
+            showStatus('Opening Google Picker...', 'info');
+
+            try {
+                const view = new google.picker.DocsView(google.picker.ViewId.SPREADSHEETS)
+                    .setIncludeFolders(true);
+
+                const picker = new google.picker.PickerBuilder()
+                    .enableFeature(google.picker.Feature.NAV_HIDDEN)
+                    .setDeveloperKey(apiKey)
+                    .setOAuthToken(accessToken)
+                    .addView(view)
+                    .setCallback(pickerCallback)
+                    .build();
+
+                picker.setVisible(true);
+                log('✅ Picker created and shown!');
+
+            } catch (error) {
+                log('❌ Picker error: ' + error.message);
+                showStatus('Picker error: ' + error.message, 'error');
+            }
+        }
+
+        function pickerCallback(data) {
+            log('📋 Picker callback: ' + JSON.stringify(data));
+
+            if (data.action === google.picker.Action.PICKED) {
+                const doc = data.docs[0];
+                log('✅ File selected: ' + doc.name + ' (ID: ' + doc.id + ')');
+                showStatus('Success! File selected: ' + doc.name, 'success');
+            } else if (data.action === google.picker.Action.CANCEL) {
+                log('ℹ️ Picker canceled');
+                showStatus('Picker was canceled', 'info');
+            } else {
+                log('ℹ️ Picker action: ' + data.action);
+            }
+        }
+
+        // Initialize
+        window.addEventListener('load', loadConfig);
+    </script>
+</body>
+</html>
