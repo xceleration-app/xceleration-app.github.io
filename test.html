@@ -122,8 +122,8 @@
 
     <script>
         // Configuration - Replace these with your actual credentials
-        const DEVELOPER_KEY = 'YOUR_API_KEY_HERE'; // Your Google API key
-        const ACCESS_TOKEN = 'YOUR_ACCESS_TOKEN_HERE'; // Your OAuth access token
+        const DEVELOPER_KEY = process.env.DEVELOPER_KEY; // Your Google API key
+        const ACCESS_TOKEN = process.env.ACCESS_TOKEN; // Your OAuth access token
 
         let gapi_loaded = false;
         let picker_loaded = false;

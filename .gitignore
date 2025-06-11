@@ -6,3 +6,4 @@ node_modules/
 .netlify/
 # OS-specific
 Thumbs.db
+.env
