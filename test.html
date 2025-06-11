@@ -148,16 +148,20 @@
 
         // Define these functions before loading the scripts
         function onGapiLoad() {
-            window.gapi_loaded = true;
-            if (window.picker_loaded) {
+            gapi_loaded = true;
+            if (picker_loaded) {
                 initializeApp();
+            } else {
+                console.log('Google Picker not loaded yet');
             }
         }
 
         function onPickerLoad() {
-            window.picker_loaded = true;
-            if (window.gapi_loaded) {
+            picker_loaded = true;
+            if (gapi_loaded) {
                 initializeApp();
+            } else {
+                console.log('Google API not loaded yet');
             }
         }
 
@@ -175,6 +179,7 @@
                 updateStatus('❌', 'Configuration Error', 'Please set your ACCESS_TOKEN in the script', 'error');
                 return;
             }
+            console.log('Google API initialized');
 
             try {
                 updateStatus('⚡', 'Loading', 'Initializing Google APIs...', 'loading');
