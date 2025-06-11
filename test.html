@@ -4,28 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Drive Picker</title>
-    <script>
-        // Define these functions before loading the scripts
-        function onGapiLoad() {
-            window.gapi_loaded = true;
-            if (window.picker_loaded) {
-                initializeApp();
-            }
-        }
-
-        function onPickerLoad() {
-            window.picker_loaded = true;
-            if (window.gapi_loaded) {
-                initializeApp();
-            }
-        }
-
-        function initializeApp() {
-            initializeGAPI();
-        }
-    </script>
-    <script type="text/javascript" src="https://apis.google.com/js/api.js" onload="onGapiLoad()"></script>
-    <script type="text/javascript" src="https://apis.google.com/js/picker.js" onload="onPickerLoad()"></script>
     <style>
         * {
             margin: 0;
@@ -168,7 +146,24 @@
             }
         }
 
-        // Original onGapiLoad and onPickerLoad functions moved to head
+        // Define these functions before loading the scripts
+        function onGapiLoad() {
+            window.gapi_loaded = true;
+            if (window.picker_loaded) {
+                initializeApp();
+            }
+        }
+
+        function onPickerLoad() {
+            window.picker_loaded = true;
+            if (window.gapi_loaded) {
+                initializeApp();
+            }
+        }
+
+        function initializeApp() {
+            initializeGAPI();
+        }
 
         function initializeGAPI() {
             if (!DEVELOPER_KEY || DEVELOPER_KEY === 'YOUR_API_KEY_HERE') {
@@ -259,7 +254,23 @@
             }
         }
 
-        // initializeApp function now defined in the head
+        document.addEventListener('load', () => {
+            const apiScript = document.createElement('script');
+            const pickerScript = document.createElement('script');
+            apiScript.src = 'https://apis.google.com/js/api.js';
+            pickerScript.src = 'https://apis.google.com/js/picker.js';
+            apiScript.onload = () => {
+                gapi.load('picker', () => {
+                    onGapiLoad();
+                });
+            };
+            pickerScript.onload = () => {
+                onPickerLoad();
+            };
+            document.head.appendChild(apiScript);
+            document.head.appendChild(pickerScript);
+        });
+
     </script>
 </body>
 </html>
