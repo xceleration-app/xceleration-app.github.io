@@ -90,6 +90,9 @@
             <label for="clientId">OAuth Client ID:</label>
             <input type="text" id="clientId" placeholder="Enter your OAuth 2.0 Client ID here">
             
+            <label for="accessToken">Access Token (Manual):</label>
+            <input type="text" id="accessToken" placeholder="Enter your Access Token here">
+            
             <button onclick="saveConfig()">💾 Save Configuration</button>
         </div>
         
@@ -97,7 +100,7 @@
         
         <div>
             <button onclick="testStep1()">1️⃣ Test API Key</button>
-            <button onclick="testStep2()" id="step2Btn" disabled>2️⃣ Test OAuth Login</button>
+            <button onclick="testStep2()" id="step2Btn" disabled>2️⃣ Test Token</button>
             <button onclick="testStep3()" id="step3Btn" disabled>3️⃣ Open Picker</button>
             <button onclick="clearLog()">🗑️ Clear Log</button>
         </div>
@@ -116,22 +119,33 @@
         function loadConfig() {
             apiKey = localStorage.getItem('test_api_key') || '';
             clientId = localStorage.getItem('test_client_id') || '';
+            accessToken = localStorage.getItem('test_access_token') || '';
             document.getElementById('apiKey').value = apiKey;
             document.getElementById('clientId').value = clientId;
+            document.getElementById('accessToken').value = accessToken;
         }
 
         function saveConfig() {
             apiKey = document.getElementById('apiKey').value.trim();
             clientId = document.getElementById('clientId').value.trim();
+            accessToken = document.getElementById('accessToken').value.trim();
             
-            if (!apiKey || !clientId) {
-                showStatus('Please enter both API Key and Client ID', 'error');
+            if (!apiKey) {
+                showStatus('Please enter at least your API Key', 'error');
                 return;
             }
             
             localStorage.setItem('test_api_key', apiKey);
             localStorage.setItem('test_client_id', clientId);
+            localStorage.setItem('test_access_token', accessToken);
+            
             showStatus('Configuration saved! Now test your API key.', 'success');
+            
+            // Enable step 2 and step 3 buttons if access token is provided
+            if (accessToken) {
+                document.getElementById('step2Btn').disabled = false;
+                document.getElementById('step3Btn').disabled = false;
+            }
         }
 
         function log(message) {
@@ -209,56 +223,51 @@
             }
         }
 
-        // Step 2: Test OAuth
+        // Step 2: Test Token
         async function testStep2() {
-            if (!gapi_loaded) {
-                showStatus('Please complete Step 1 first!', 'error');
+            // Check if we have the manually entered access token
+            accessToken = document.getElementById('accessToken').value.trim();
+            
+            if (!accessToken) {
+                showStatus('Please enter an Access Token in the configuration section first!', 'error');
                 return;
             }
 
-            log('🔐 Initializing OAuth...');
-            showStatus('Initializing OAuth...', 'info');
+            log('🔐 Using manually entered Access Token...');
+            showStatus('Testing Access Token...', 'info');
 
-            try {
-                const authInstance = gapi.auth2.init({
-                    client_id: clientId,
-                    scope: 'https://www.googleapis.com/auth/drive.file'
-                });
-
-                log('🔐 OAuth initialized, signing in...');
-                const user = await authInstance.signIn();
+            try {                
+                log('✅ Access token entered! Token length: ' + accessToken.length);
                 
-                if (user.isSignedIn()) {
-                    accessToken = user.getAuthResponse().access_token;
-                    log('✅ OAuth successful! Token length: ' + accessToken.length);
-                    
-                    // Test token
-                    const tokenResponse = await fetch(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`);
-                    const tokenInfo = await tokenResponse.json();
-                    
-                    if (tokenResponse.ok) {
-                        log('✅ Token is valid. Scopes: ' + tokenInfo.scope);
-                        document.getElementById('step3Btn').disabled = false;
-                        showStatus('OAuth successful! Now you can test the picker.', 'success');
-                    } else {
-                        log('❌ Token validation failed: ' + JSON.stringify(tokenInfo));
-                        showStatus('Token validation failed', 'error');
-                    }
+                // Test token
+                const tokenResponse = await fetch(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`);
+                const tokenInfo = await tokenResponse.json();
+                
+                if (tokenResponse.ok) {
+                    log('✅ Token is valid. Scopes: ' + tokenInfo.scope);
+                    document.getElementById('step3Btn').disabled = false;
+                    showStatus('Token is valid! Now you can test the picker.', 'success');
                 } else {
-                    log('❌ User not signed in');
-                    showStatus('OAuth sign-in failed', 'error');
+                    log('❌ Token validation failed: ' + JSON.stringify(tokenInfo));
+                    showStatus('Token validation failed: ' + (tokenInfo.error_description || tokenInfo.error), 'error');
                 }
-
             } catch (error) {
-                log('❌ OAuth error: ' + error.message);
-                showStatus('OAuth error: ' + error.message, 'error');
+                log('❌ Token validation error: ' + error.message);
+                showStatus('Token validation error: ' + error.message, 'error');
             }
         }
 
         // Step 3: Test Picker
         function testStep3() {
+            accessToken = document.getElementById('accessToken').value.trim();
+            
             if (!accessToken) {
-                showStatus('Please complete Step 2 first!', 'error');
+                showStatus('Please enter an access token in the configuration section first!', 'error');
+                return;
+            }
+            
+            if (!apiKey) {
+                showStatus('Please enter an API key in the configuration section first!', 'error');
                 return;
             }
 
