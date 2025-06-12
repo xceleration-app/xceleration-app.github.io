@@ -14,25 +14,45 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
             background: #fff;
-            min-height: 100vh;
+            min-height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         
+        .spinner { 
+            width: 40px; 
+            height: 40px; 
+            border: 4px solid #f3f3f3; 
+            border-radius: 50%; 
+            border-top: 4px solid #3498db; 
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        
         @keyframes spin {
-            from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
     </style>
 </head>
     <script>
-        // Hardcoded credentials from your .env file
         const DEVELOPER_KEY = 'AIzaSyBBtRX5-89QQrrT1rd3BDxKZwVFJ1ocvrw'; 
-        const ACCESS_TOKEN = 'ya29.a0AW4XtxgnaDauYKbA-bxO1CNh69j84HWP4O9zsjzf-x96xyosnBnCMjuMro2WhI23Hi0gvVVckJWMQgms7Y5oK1DlJJoCWnyzrUPSR-rv3b8JqNCunDA1y4JpoeSvCrlL-qhehxVbvBx3zOgGyr50RChH4Li-FIq5MvoNPskQaCgYKAT8SARUSFQHGX2Mizai-QusE83TpxQhfCyLixw0175'; 
+        const ACCESS_TOKEN = 'ya29.a0AW4XtxjPb-VI4KmnAw_VcxZ29bb-Z7ry0o1donKAV5jwpSsInFYoDGI3W8meYfmBzy5aquA25yxbxHU25GCyozkD_mDNB6nCVy1AGNXCIaeqEoqh9W5CwGJkW_nFlcgeZUW4Xjik4mrryHiCxfCBtRiE3beHkqeIThKn1NMoaCgYKAXsSARUSFQHGX2Mi42wVLibAV_BH3Zw4oDIkWA0175'; 
+        const JS_CHANNEL = '{{DEFAULT_JS_CHANNEL}}';
         let access_token = null;
         let gapi_loaded = false;
         let picker_loaded = false;
+
+        // Send a message back to Flutter
+        function sendToFlutter(data) {
+            if (window[JS_CHANNEL]) {
+                try {
+                    window[JS_CHANNEL].postMessage(JSON.stringify(data));
+                } catch (e) {
+                    console.error('Error sending to Flutter: ' + e);
+                }
+            }
+        }
 
 
         // Define these functions before loading the scripts
@@ -40,17 +60,13 @@
             gapi_loaded = true;
             if (picker_loaded) {
                 initializeApp();
-            } else {
-                console.log('Google Picker not loaded yet');
-            }
+            } 
         }
 
         function onPickerLoad() {
             picker_loaded = true;
             if (gapi_loaded) {
                 initializeApp();
-            } else {
-                console.log('Google API not loaded yet');
             }
         }
 
@@ -59,13 +75,13 @@
         }
 
         function initializeGAPI() {
-            if (!DEVELOPER_KEY || DEVELOPER_KEY === 'YOUR_API_KEY_HERE') {
-                updateStatus('❌', 'Configuration Error', 'Please set your DEVELOPER_KEY in the script', 'error');
+            if (DEVELOPER_KEY.isEmpty || DEVELOPER_KEY === '{{DEVELOPER_KEY}}') {
+                sendToFlutter({ action: 'error', message: 'Missing or invalid DEVELOPER_KEY' });
                 return;
             }
 
-            if (!ACCESS_TOKEN || ACCESS_TOKEN === 'YOUR_ACCESS_TOKEN_HERE') {
-                updateStatus('❌', 'Configuration Error', 'Please set your ACCESS_TOKEN in the script', 'error');
+            if (ACCESS_TOKEN.isEmpty || ACCESS_TOKEN === '{{ACCESS_TOKEN}}') {
+                sendToFlutter({ action: 'error', message: 'Missing or invalid ACCESS_TOKEN' });
                 return;
             }
             console.log('Google API initialized');
@@ -74,9 +90,6 @@
         }
 
         function openPicker() {
-            if (!access_token) {
-                return;
-            }
             try {
                 // Create a custom view for spreadsheets, CSV, and XLSX files
                 const spreadsheetView = new google.picker.DocsView()
@@ -96,27 +109,16 @@
                 picker.setVisible(true);
 
             } catch (error) {
-                console.error('Picker error:', error);
+                sendToFlutter({ action: 'error', message: 'Picker error: ' + error });
             }
         }
 
         function pickerCallback(data) {
-            console.log('Picker callback:', data);
-
             if (data.action === google.picker.Action.PICKED) {
                 const file = data.docs[0];
-                
-                
-                // Log selected files
-                console.log('Selected file:', {
-                        name: file.name,
-                        id: file.id,
-                        mimeType: file.mimeType,
-                        url: file.url
-                    });
-                
+                sendToFlutter({ action: 'picked', data: file, isLocalFile: false });
             } else if (data.action === google.picker.Action.CANCEL) {
-                console.log('Picker cancelled');
+                sendToFlutter({ action: 'canceled' });
             }
         }
 
