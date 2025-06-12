@@ -209,7 +209,7 @@
                 // Create a custom view for spreadsheets, CSV, and XLSX files
                 const spreadsheetView = new google.picker.DocsView()
                     .setMimeTypes('application/vnd.google-apps.spreadsheet,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv')
-                    .setMode(DocsViewMode.LIST);
+                    .setMode(google.picker.DocsViewMode.LIST);
                 
                 // Create picker
                 const picker = new google.picker.PickerBuilder()
