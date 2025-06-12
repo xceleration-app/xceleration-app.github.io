@@ -1,144 +1,76 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Drive Picker</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            background: #fff;
-            min-height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .spinner { 
-            width: 40px; 
-            height: 40px; 
-            border: 4px solid #f3f3f3; 
-            border-radius: 50%; 
-            border-top: 4px solid #3498db; 
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-    </style>
-</head>
-    <script>
-        const DEVELOPER_KEY = 'AIzaSyBBtRX5-89QQrrT1rd3BDxKZwVFJ1ocvrw'; 
-        const ACCESS_TOKEN = 'ya29.a0AW4XtxjPb-VI4KmnAw_VcxZ29bb-Z7ry0o1donKAV5jwpSsInFYoDGI3W8meYfmBzy5aquA25yxbxHU25GCyozkD_mDNB6nCVy1AGNXCIaeqEoqh9W5CwGJkW_nFlcgeZUW4Xjik4mrryHiCxfCBtRiE3beHkqeIThKn1NMoaCgYKAXsSARUSFQHGX2Mi42wVLibAV_BH3Zw4oDIkWA0175'; 
-        const JS_CHANNEL = '{{DEFAULT_JS_CHANNEL}}';
-        let access_token = null;
-        let gapi_loaded = false;
-        let picker_loaded = false;
+            <html>
+            <head>
+            <title>Google Picker with Access Token (Picker Only)</title>
+            <meta charset="UTF-8">
+            </head>
+            <body>
+            <h1>Google Drive File Picker</h1>
+            <button onclick="createPicker()">Open File Picker</button>
+            <p id="result">Selected file will appear here.</p>
 
-        // Send a message back to Flutter
-        function sendToFlutter(data) {
-            if (window[JS_CHANNEL]) {
-                try {
-                    window[JS_CHANNEL].postMessage(JSON.stringify(data));
-                } catch (e) {
-                    console.error('Error sending to Flutter: ' + e);
+            <!-- Load Google API client library -->
+            <script src="https://apis.google.com/js/api.js"></script>
+
+            <script>
+                // *** REQUIRED: Replace with your API Key from Google Cloud Console ***
+                const API_KEY = 'AIzaSyBBtRX5-89QQrrT1rd3BDxKZwVFJ1ocvrw';
+                // *** REQUIRED: Replace with your Google Cloud Project Number ***
+                const APP_ID = '529053126812';
+                // *** REQUIRED: Replace with your valid access token ***
+                const ACCESS_TOKEN = 'ya29.a0AW4XtxiGuFFn1wQWGZCQGyNntrmw75LfL1YAxFuhxmC_R60vbyrSMznIl9WtGJ-jQiPMK8QfxqeZIjigDZnTTYe1dMBiSVU-FgdzDQH1KwUBBR2lZuSykM8JaZqsXC8ax3K2v6caAUHNY55K36Fj-_urUmO3n5AOax7-YnPHaCgYKAQESARUSFQHGX2Mi8rmGMIe8yL-ul8F4N4twcQ0175';
+
+                // Load the Picker API
+                function initPicker() {
+                gapi.load('picker', () => {
+                    console.log('Picker API loaded');
+                    // Picker API is ready to use
+                });
                 }
-            }
-        }
 
+                // Create and show the Google Picker
+                function createPicker() {
+                if (!ACCESS_TOKEN) {
+                    document.getElementById('result').innerText = 'Error: No access token provided';
+                    console.error('Access token is missing');
+                    return;
+                }
 
-        // Define these functions before loading the scripts
-        function onGapiLoad() {
-            gapi_loaded = true;
-            if (picker_loaded) {
-                initializeApp();
-            } 
-        }
+                // Create a view for Google Drive files
+                const view = new google.picker.View(google.picker.ViewId.DOCS);
+                // Optional: Filter for specific file types (e.g., documents, spreadsheets)
+                view.setMimeTypes('application/pdf,application/vnd.google-apps.document');
 
-        function onPickerLoad() {
-            picker_loaded = true;
-            if (gapi_loaded) {
-                initializeApp();
-            }
-        }
+                const uploadView = new google.picker.View(google.picker.ViewId.UPLOAD);
+                uploadView.setMimeTypes('application/pdf,application/vnd.google-apps.document');
 
-        function initializeApp() {
-            initializeGAPI();
-        }
-
-        function initializeGAPI() {
-            if (DEVELOPER_KEY.isEmpty || DEVELOPER_KEY === '{{DEVELOPER_KEY}}') {
-                sendToFlutter({ action: 'error', message: 'Missing or invalid DEVELOPER_KEY' });
-                return;
-            }
-
-            if (ACCESS_TOKEN.isEmpty || ACCESS_TOKEN === '{{ACCESS_TOKEN}}') {
-                sendToFlutter({ action: 'error', message: 'Missing or invalid ACCESS_TOKEN' });
-                return;
-            }
-            console.log('Google API initialized');
-            access_token = ACCESS_TOKEN;
-            openPicker();
-        }
-
-        function openPicker() {
-            try {
-                // Create a custom view for spreadsheets, CSV, and XLSX files
-                const spreadsheetView = new google.picker.DocsView()
-                    .setMimeTypes('application/vnd.google-apps.spreadsheet,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv')
-                    .setMode(google.picker.DocsViewMode.LIST);
-                
-                // Create picker
+                // Build the Picker
                 const picker = new google.picker.PickerBuilder()
-                    .setDeveloperKey(DEVELOPER_KEY)
-                    .setOAuthToken(access_token)
-                    .addView(spreadsheetView)
-                    .setTitle('Select a Spreadsheet')
-                    .enableFeature(google.picker.Feature.NAV_HIDDEN)
+                    // .addView(view)
+                    .addView(uploadView)
+                    // Use the provided access token
+                    .setOAuthToken(ACCESS_TOKEN)
+                    // *** REQUIRED: Set App ID for drive.file scope to work ***
+                    .setAppId(APP_ID)
+                    .setDeveloperKey(API_KEY)
                     .setCallback(pickerCallback)
                     .build();
 
                 picker.setVisible(true);
+                }
 
-            } catch (error) {
-                sendToFlutter({ action: 'error', message: 'Picker error: ' + error });
-            }
-        }
+                // Handle Picker response
+                function pickerCallback(data) {
+                if (data[google.picker.Response.ACTION] === google.picker.Action.PICKED) {
+                    const doc = data[google.picker.Response.DOCUMENTS][0];
+                    const fileId = doc[google.picker.Document.ID];
+                    const fileName = doc[google.picker.Document.NAME];
+                    document.getElementById('result').innerText = 'Selected file: ' + fileName + ' (ID: ' + fileId + ')';
+                }
+                }
 
-        function pickerCallback(data) {
-            if (data.action === google.picker.Action.PICKED) {
-                const file = data.docs[0];
-                sendToFlutter({ action: 'picked', data: file, isLocalFile: false });
-            } else if (data.action === google.picker.Action.CANCEL) {
-                sendToFlutter({ action: 'canceled' });
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const apiScript = document.createElement('script');
-            const pickerScript = document.createElement('script');
-            apiScript.src = 'https://apis.google.com/js/api.js';
-            pickerScript.src = 'https://apis.google.com/js/picker.js';
-            apiScript.onload = () => {
-                gapi.load('picker', () => {
-                    onGapiLoad();
-                });
-            };
-            pickerScript.onload = () => {
-                onPickerLoad();
-            };
-            document.head.appendChild(apiScript);
-            document.head.appendChild(pickerScript);
-        });
-
-    </script>
-</body>
-</html>
+                // Load the Picker API when the page loads
+                window.onload = initPicker;
+            </script>
+            </body>
+            </html>
