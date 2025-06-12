@@ -41,13 +41,9 @@
                 // Optional: Filter for specific file types (e.g., documents, spreadsheets)
                 view.setMimeTypes('application/pdf,application/vnd.google-apps.document');
 
-                const uploadView = new google.picker.View(google.picker.ViewId.UPLOAD);
-                uploadView.setMimeTypes('application/pdf,application/vnd.google-apps.document');
-
                 // Build the Picker
                 const picker = new google.picker.PickerBuilder()
-                    // .addView(view)
-                    .addView(uploadView)
+                    .addView(view)
                     // Use the provided access token
                     .setOAuthToken(ACCESS_TOKEN)
                     // *** REQUIRED: Set App ID for drive.file scope to work ***
