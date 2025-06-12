@@ -208,23 +208,15 @@
             try {
                 // Create a custom view for spreadsheets, CSV, and XLSX files
                 const spreadsheetView = new google.picker.DocsView()
-                    .setIncludeFolders(true)
                     .setMimeTypes('application/vnd.google-apps.spreadsheet,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv')
-                    .setSelectFolderEnabled(false);
+                    .setMode(DocsViewMode.LIST);
                 
-                // Also add the standard spreadsheets view
-                const nativeSpreadsheetView = new google.picker.DocsView(google.picker.ViewId.SPREADSHEETS)
-                    .setIncludeFolders(true)
-                    .setSelectFolderEnabled(false);
-
-                // Create picker without multi-select and upload view
+                // Create picker
                 const picker = new google.picker.PickerBuilder()
                     .setDeveloperKey(DEVELOPER_KEY)
                     .setOAuthToken(access_token)
-                    .addView(nativeSpreadsheetView)
                     .addView(spreadsheetView)
                     .setTitle('Select a Spreadsheet')
-                    .setSize(1051, 650)
                     .setCallback(pickerCallback)
                     .build();
 
