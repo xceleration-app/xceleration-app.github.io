@@ -1,0 +1,8 @@
+<script>
+    if (window.opener) {
+      window.opener.postMessage(location.hash, '*');
+      window.close();
+    } else {
+      window.location.href = '/google_picker.html' + location.hash;
+    }
+  </script>
