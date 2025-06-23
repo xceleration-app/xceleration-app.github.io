@@ -1,8 +1,25 @@
-<script>
-    if (window.opener) {
-      window.opener.postMessage(location.hash, '*');
-      window.close();
-    } else {
-      window.location.href = '/google_picker.html' + location.hash;
-    }
-  </script>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Security-Policy" content="
+            default-src 'self';
+            script-src 'self' https://apis.google.com;
+            connect-src 'self' https://www.googleapis.com https://accounts.google.com;
+            frame-src https://accounts.google.com https://content.googleapis.com https://docs.google.com;
+        ">
+        <meta name="robots" content="noindex, nofollow">
+        <title>Google OAuth2 Callback</title>
+    </head>
+    <body>
+        <script>
+            if (window.opener) {
+                window.opener.postMessage(location.hash, 'https://xceleration-app.github.io');
+                window.close();
+            } else {
+                window.location.href = '/google_picker.html' + location.hash;
+            }
+        </script>
+    </body>
+</html>
