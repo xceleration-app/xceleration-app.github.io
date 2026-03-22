@@ -7,7 +7,6 @@
         <title>Google Drive Picker</title>
         <link rel="icon" href="images/icon.png" type="image/png">
         <style>
-            /* Apply transparency to ALL elements */
             html, body, div, span, iframe, * {
                 margin: 0;
                 padding: 0;
@@ -23,8 +22,6 @@
             body {
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
                 width: 100vw;
-                /* height: 100vh; */
-                /* overflow: hidden; */
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -44,7 +41,6 @@
                 to { transform: rotate(360deg); }
             }
             
-            /* Make Google Picker take up maximum space with rounded corners and transparency */
             .picker-dialog {
                 width: 100% !important;
                 max-width: 100% !important;
@@ -68,107 +64,63 @@
     </div>
 
 <script>
-    // Console logging setup
-    console.originalLog = console.log;
-    console.originalError = console.error;
-    console.originalWarn = console.warn;
-    
-    console.log = function() {
-        console.originalLog.apply(console, arguments);
-        var message = Array.prototype.slice.call(arguments).join(' ');
-        if (window.LogChannel) {
-            window.LogChannel.postMessage('[LOG] ' + message);
-        }
-    };
-    
-    console.error = function() {
-        console.originalError.apply(console, arguments);
-        var message = Array.prototype.slice.call(arguments).join(' ');
-        if (window.LogChannel) {
-            window.LogChannel.postMessage('[ERROR] ' + message);
-        }
-    };
-    
-    console.warn = function() {
-        console.originalWarn.apply(console, arguments);
-        var message = Array.prototype.slice.call(arguments).join(' ');
-        if (window.LogChannel) {
-            window.LogChannel.postMessage('[WARN] ' + message);
-        }
-    };
-    
-    window.addEventListener('error', function(e) {
-        if (window.LogChannel) {
-            window.LogChannel.postMessage('[JS ERROR] ' + e.message + ' at ' + e.filename + ':' + e.lineno);
-        }
-    });
-
-    // Global variables that will be set by Flutter
+    // Global variables — populated from URL fragment on DOMContentLoaded
     let DEVELOPER_KEY = '';
     let APP_ID = '';
-    let CALLBACK_CHANNEL = '';
     let ACCESS_TOKEN = '';
     let gapi_loaded = false;
     let picker_loaded = false;
     let scripts_loaded = false;
 
-    // Send a message back to Flutter
+    // Read a parameter from the URL fragment (#key=value&key2=value2).
+    // Credentials are passed via fragment (not query params) so they are never
+    // sent to the server or stored in access logs.
+    function getFragmentParam(name) {
+        const hash = window.location.hash.substring(1); // strip leading '#'
+        return new URLSearchParams(hash).get(name);
+    }
+
+    // Return the result to the Flutter app by redirecting to the custom URL
+    // scheme. iOS intercepts xcelerationapp:// URLs, closes the Safari sheet,
+    // and delivers the URL to the app via app_links.
     function sendToFlutter(data) {
-        const channelName = window.CALLBACK_CHANNEL || CALLBACK_CHANNEL;
-        if (window[channelName]) {
-            try {
-                console.log('Sending to Flutter:', data);
-                window[channelName].postMessage(JSON.stringify(data));
-            } catch (e) {
-                console.error('Error sending to Flutter:', e);
-            }
+        const params = new URLSearchParams();
+        if (data.action === 'picked') {
+            const file = data.data;
+            params.set('action', 'picked');
+            params.set('fileId', file.id);
+            params.set('fileName', file.name);
+            params.set('mimeType', file.mimeType);
+        } else if (data.action === 'canceled') {
+            params.set('action', 'canceled');
         } else {
-            console.error('Flutter channel not available:', channelName);
+            params.set('action', 'error');
+            params.set('message', data.message || 'Unknown error');
         }
+        window.location.href = 'xcelerationapp://picker?' + params.toString();
     }
 
     function onGapiLoad() {
-        console.log('GAPI loaded');
         gapi_loaded = true;
         checkReadyAndInit();
     }
 
     function onPickerLoad() {
-        console.log('Picker API loaded');
         picker_loaded = true;
         checkReadyAndInit();
     }
 
     function checkReadyAndInit() {
-        console.log('Checking ready state:', {
-            gapi_loaded,
-            picker_loaded,
-            scripts_loaded,
-            has_developer_key: !!DEVELOPER_KEY,
-            has_access_token: !!ACCESS_TOKEN,
-            has_callback_channel: !!CALLBACK_CHANNEL
-        });
-
-        if (gapi_loaded && picker_loaded && scripts_loaded && DEVELOPER_KEY && ACCESS_TOKEN && CALLBACK_CHANNEL) {
-            console.log('All ready, initializing picker');
+        if (gapi_loaded && picker_loaded && scripts_loaded && DEVELOPER_KEY && ACCESS_TOKEN) {
             initializePicker();
         }
     }
 
     function initializePicker() {
         try {
-            console.log('Initializing picker with:');
-            console.log('- Developer key length:', DEVELOPER_KEY.length);
-            console.log('- Access token length:', ACCESS_TOKEN.length);
-            console.log('- Callback channel:', CALLBACK_CHANNEL);
-            
-            // Hide loading indicator
             const loading = document.getElementById('loading');
-            if (loading) {
-                loading.style.display = 'none';
-            }
+            if (loading) loading.style.display = 'none';
 
-            // Create a custom view for spreadsheets, CSV, and XLSX files
             const spreadsheetView = new google.picker.DocsView()
                 .setMimeTypes('application/vnd.google-apps.spreadsheet,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv')
                 .setMode(google.picker.DocsViewMode.LIST);
@@ -182,71 +134,44 @@
                 .setTitle('Select a Spreadsheet')
                 .enableFeature(google.picker.Feature.NAV_HIDDEN)
                 .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-                // .setSize(google.picker.Size.DIALOG)
                 .setAppId(APP_ID)
                 .setCallback(pickerCallback)
                 .build();
 
             picker.setVisible(true);
-            console.log('Picker built successfully, showing picker');
         } catch (e) {
-            console.error('Error initializing picker:', e);
-            sendToFlutter({ action: 'error', message: 'Failed to initialize picker: ' + e, type: 'Google Drive Picker Initialization Failed' });
+            sendToFlutter({ action: 'error', message: 'Failed to initialize picker: ' + e });
         }
     }
 
     function pickerCallback(data) {
-        console.log('Picker callback:', data);
-        
         if (data.action === google.picker.Action.PICKED) {
-            const file = data.docs[0];
-            console.log('File picked:', file);
-            sendToFlutter({ action: 'picked', data: file });
+            sendToFlutter({ action: 'picked', data: data.docs[0] });
         } else if (data.action === google.picker.Action.CANCEL) {
-            console.log('Picker cancelled');
             sendToFlutter({ action: 'canceled' });
         }
     }
 
-    // Function to be called by Flutter to set variables and trigger initialization
-    window.setPickerVariables = function(developerKey, accessToken, appId, callbackChannel) {
-        console.log('Setting picker variables from Flutter');
-        DEVELOPER_KEY = developerKey;
-        ACCESS_TOKEN = accessToken;
-        APP_ID = appId;
-        CALLBACK_CHANNEL = callbackChannel;
-        checkReadyAndInit();
-    };
-
-    // Load the Google APIs
     function loadGoogleAPIs() {
-        console.log('Loading Google APIs');
-        
-        // Load the GAPI script
         const gapiScript = document.createElement('script');
         gapiScript.src = 'https://apis.google.com/js/api.js';
         gapiScript.onload = function() {
-            console.log('GAPI script loaded, loading picker');
             gapi.load('picker', {
                 callback: onGapiLoad,
                 onerror: function(e) {
-                    console.error('Error loading picker:', e);
-                    sendToFlutter({ action: 'error', message: 'Failed to load Google Picker API', type: 'Google Authentication Failed' });
+                    sendToFlutter({ action: 'error', message: 'Failed to load Google Picker API' });
                 }
             });
         };
-        gapiScript.onerror = function(e) {
-            console.error('Error loading GAPI script:', e);
-            sendToFlutter({ action: 'error', message: 'Failed to load Google API script', type: 'Google Authentication Failed' });
+        gapiScript.onerror = function() {
+            sendToFlutter({ action: 'error', message: 'Failed to load Google API script' });
         };
             
-        // Load the Picker script
         const pickerScript = document.createElement('script');
         pickerScript.src = 'https://apis.google.com/js/picker.js';
         pickerScript.onload = onPickerLoad;
-        pickerScript.onerror = function(e) {
-            console.error('Error loading picker script:', e);
-            sendToFlutter({ action: 'error', message: 'Failed to load Google Picker script', type: 'Google Authentication Failed' });
+        pickerScript.onerror = function() {
+            sendToFlutter({ action: 'error', message: 'Failed to load Google Picker script' });
         };
         
         document.head.appendChild(gapiScript);
@@ -255,9 +180,18 @@
         scripts_loaded = true;
     }
 
-    // Initialize when DOM is ready
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM loaded, starting initialization');
+        // Read credentials from URL fragment — set before loading Google APIs
+        // so they are available when checkReadyAndInit() fires.
+        DEVELOPER_KEY = getFragmentParam('devKey') || '';
+        ACCESS_TOKEN = getFragmentParam('token') || '';
+        APP_ID = getFragmentParam('appId') || '';
+
+        if (!DEVELOPER_KEY || !ACCESS_TOKEN) {
+            sendToFlutter({ action: 'error', message: 'Missing picker credentials' });
+            return;
+        }
+
         loadGoogleAPIs();
     });
 </script>
