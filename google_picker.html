@@ -176,6 +176,7 @@
             const picker = new google.picker.PickerBuilder()
                 .setDeveloperKey(DEVELOPER_KEY)
                 .setOAuthToken(ACCESS_TOKEN)
+                .setAuthUser(0)
                 .setOrigin('https://xceleration-app.github.io/')
                 .addView(spreadsheetView)
                 .setTitle('Select a Spreadsheet')
