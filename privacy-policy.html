@@ -1,115 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- head-widget: Privacy Policy Page -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - XCeleration</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <meta name="description" content="How XCeleration collects, uses and protects your information.">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="/images/icon.png">
     <link rel="stylesheet" href="/style.css">
-    <!-- end head-widget -->
 </head>
-<body>
-    <!-- nav-widget: Privacy Policy Page -->
-<header>
-    <h1>XCeleration</h1>
+<body id="top">
+<header class="site-header">
+    <div class="wrap">
+        <a class="brand" href="/index.html"><img src="/images/icon.png" alt="">XCeleration</a>
+        <nav class="site-nav" aria-label="Main">
+            <a href="/index.html">Home</a>
+            <a href="/privacy-policy.html" aria-current="page">Privacy</a>
+            <a href="/terms.html">Terms</a>
+            <a href="/support.html">Support</a>
+        </nav>
+    </div>
 </header>
-<nav>
-    <a href="/index.html" class="nav-link">Home</a>
-    <a href="/privacy-policy.html" class="nav-link" style="font-weight:bold; text-decoration:underline;">Privacy Policy</a>
-    <a href="/terms.html" class="nav-link">Terms of Service</a>
-    <a href="/support.html" class="nav-link">Support</a>
-</nav>
-<div class="tagline">Your privacy matters. Read how we protect your data.</div>
-<!-- end nav-widget -->
 <main>
-        <h2>Privacy Policy</h2>
-        <p><strong>Effective Date:</strong> September 26, 2026</p>
-        <h3>Introduction</h3>
-        <p>This Privacy Policy explains what information XCeleration ("we", "our", or "us") collects when you use the XCeleration mobile app (the "App"), how it is used, and the choices you have.</p>
-        <p>XCeleration helps cross country coaches run races: a coach sets up teams and races, assistants time the finish and record bib numbers on their own phones, and the coach puts the results together.</p>
-        <h3>Information We Collect</h3>
-        <h4>Account information</h4>
-        <ul>
-            <li><strong>Email address and password</strong>: When you create an account, we store your email address and a securely hashed password with our backend provider, Supabase. We never see your password.</li>
-            <li><strong>Display name</strong>: If you add a name to your profile, we store it with your email address.</li>
-        </ul>
-        <h4>Race information you enter</h4>
-        <ul>
-            <li><strong>Teams, runners and races</strong>: Coaches enter team names and colours, runners' names, grades and bib numbers, race details (name, date, location, distance), finish times and results.</li>
-            <li><strong>Where it is kept</strong>: This information is stored on your phone. When you are signed in, it is also saved to your account in the cloud (Supabase), so you can use more than one phone and keep your races if you change phones. Only you can read the race information saved to your account.</li>
-        </ul>
-        <h4>Runners are usually students</h4>
-        <p>Most runners are students, and many are under 18. Their names, grades, bib numbers and times are entered by their coach, not by the runners themselves. The App is meant for coaches and their helpers and is not directed to children under 13. Coaches should only enter runner information they are allowed to use for their team. If you are a parent or runner and want information about you removed, contact the coach or email us at the address below.</p>
-        <h4>Camera</h4>
-        <p>With your permission, the App uses the camera only to scan a QR code on another phone, to connect the two phones. Camera images are processed on your phone and are not saved or sent anywhere.</p>
-        <h4>Microphone and voice entry</h4>
-        <p>With your permission, the Bib Recorder lets you say bib numbers instead of typing them. Speech is turned into numbers on your phone using a speech model the App downloads once (from Hugging Face, a public model host). Recordings are kept only in temporary storage on your phone while they are being recognized, are overwritten each time, and are never uploaded or shared. You can turn voice entry off in the Bib Recorder at any time.</p>
-        <h4>Files you choose to import</h4>
-        <p>With your permission, you can pick a file, such as a roster spreadsheet, to import runners. The App only reads the file you choose. It does not look through or upload your photos or other files.</p>
-        <h4>Google Drive and Google Sheets</h4>
-        <p>If you choose to import a roster from Google Sheets or export results to Google Sheets, you sign in with your Google account and grant access. XCeleration requests only Google's most limited Drive permission, which lets it:</p>
-        <ul>
-            <li>open the spreadsheets you pick in the Google file picker, and</li>
-            <li>create and update the results spreadsheets it makes for you.</li>
-        </ul>
-        <p>It cannot see or change any other files in your Google Drive. We do not store your Google password, and spreadsheet contents are used only to import your runners or export your results.</p>
-        <p>XCeleration's use and transfer of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including the Limited Use requirements. You can remove XCeleration's access at any time in your <a href="https://myaccount.google.com/permissions">Google Account settings</a>.</p>
-        <h4>Crash and error reports</h4>
-        <p>To find and fix bugs, the App sends crash and error reports to Sentry, our error-monitoring provider. A report includes technical details such as the error, the device model, the operating system version and the App version, plus limited performance data. We do not attach your name or email address to these reports, and they are not used for advertising.</p>
-        <h3>How Phones Share Race Information</h3>
-        <p>Coaches, timers and bib recorders pass races, finish times and bib numbers between nearby phones. This goes directly from phone to phone over Bluetooth or Wi-Fi, after the phones are connected (for example, by scanning a QR code). It does not go through our servers, and nothing is shared unless someone on each phone chooses to send or receive.</p>
-        <p>When you share results (for example, as a PDF or text), the App uses your phone's share sheet, and you choose who receives them.</p>
-        <h3>Spectator Accounts and Linked Coaches</h3>
-        <p>A spectator, such as a parent, can link their account to a coach by entering the coach's email address. Once linked, the coach and the spectator can see each other's email address and display name. Linking does not give the spectator access to the coach's teams, runners or races. The coach or the spectator can remove the link at any time.</p>
-        <h3>How We Use Information</h3>
-        <p>We use the information described above only to:</p>
-        <ul>
-            <li>run the App and its features, such as timing, bib recording, results and sharing,</li>
-            <li>save your races to your account and keep your phones in sync,</li>
-            <li>fix bugs and keep the App working reliably, and</li>
-            <li>keep your account secure.</li>
-        </ul>
-        <p>We do not sell your information, use it for advertising, or share it with data brokers.</p>
-        <h3>Service Providers</h3>
-        <p>We use a small number of providers to run the App. Each receives only what it needs:</p>
-        <ul>
-            <li><strong>Supabase</strong>: account sign-in and cloud storage of your races.</li>
-            <li><strong>Sentry</strong>: crash and error reports.</li>
-            <li><strong>Google</strong>: only if you use Google Sheets import or export.</li>
-            <li><strong>Hugging Face</strong>: hosts the speech model the App downloads for voice entry. Downloading it shares only standard connection information, such as your IP address.</li>
-        </ul>
-        <p>We may also disclose information if required by law or to protect the rights and safety of our users or others.</p>
-        <h3>Keeping and Deleting Your Information</h3>
-        <ul>
-            <li><strong>On your phone</strong>: Race information stays on your phone until you delete it or remove the App.</li>
-            <li><strong>In your account</strong>: Race information stays in your account until you delete it. When you delete a race, it is removed from your phones and marked as deleted in your account.</li>
-            <li><strong>Deleting your account</strong>: You can delete your account from Settings in the App. This permanently erases your account, profile, teams, runners, races and results from our servers, and removes any links to spectators or coaches. You can also email us to ask for your account to be deleted.</li>
-        </ul>
-        <h3>Security</h3>
-        <p>Information sent between the App and our servers is encrypted in transit, and each account can only read its own race information. No system is perfectly secure, so we cannot guarantee absolute security.</p>
-        <h3>Your Choices and Rights</h3>
-        <p>You can:</p>
-        <ul>
-            <li>view and change your teams, runners and races in the App,</li>
-            <li>delete races, or delete your whole account, in the App,</li>
-            <li>turn camera, microphone and local network access on or off in your phone's settings,</li>
-            <li>turn voice entry off in the Bib Recorder,</li>
-            <li>remove XCeleration's access to your Google account, and</li>
-            <li>contact us to ask what information we hold about you, or to have it corrected or deleted.</li>
-        </ul>
-        <h4>California privacy rights</h4>
-        <p>California residents may have additional rights under the California Consumer Privacy Act (CCPA), including the right to know about and delete personal information. We do not sell or share personal information as those terms are defined in the CCPA. To make a request, email us at the address below.</p>
-        <h3>International Data Transfers</h3>
-        <p>Our service providers may store and process information in countries other than the one you live in, which may have different data protection laws.</p>
-        <h3>Changes to This Privacy Policy</h3>
-        <p>We may update this Privacy Policy from time to time. When we do, we will post the new version on this page and update the effective date. If a change is significant, we will also take reasonable steps to let you know, such as a notice in the App.</p>
-        <h3>Contact Us</h3>
-        <p>If you have any questions about this Privacy Policy or your information, email us at <a href="mailto:xceleration.app@gmail.com">xceleration.app@gmail.com</a>.</p>
-    </main>
-</body>
-<footer>
-    <p>2026 XCeleration App</p>
+    <div class="wrap doc">
+        <div class="page-title">
+            <h1>Privacy Policy</h1>
+            <p>Effective September 26, 2026</p>
+        </div>
+        <nav class="toc" aria-label="On this page">
+            <h2>On this page</h2>
+            <ol>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#information-we-collect">Information We Collect</a></li>
+                <li><a href="#how-phones-share-race-information">How Phones Share Race Information</a></li>
+                <li><a href="#spectator-accounts-and-linked-coaches">Spectator Accounts and Linked Coaches</a></li>
+                <li><a href="#how-we-use-information">How We Use Information</a></li>
+                <li><a href="#service-providers">Service Providers</a></li>
+                <li><a href="#keeping-and-deleting-your-information">Keeping and Deleting Your Information</a></li>
+                <li><a href="#security">Security</a></li>
+                <li><a href="#your-choices-and-rights">Your Choices and Rights</a></li>
+                <li><a href="#international-data-transfers">International Data Transfers</a></li>
+                <li><a href="#changes-to-this-privacy-policy">Changes to This Privacy Policy</a></li>
+                <li><a href="#contact-us">Contact Us</a></li>
+            </ol>
+        </nav>
+        <article class="card">
+            <h3 id="introduction">Introduction</h3>
+            <p>This Privacy Policy explains what information XCeleration ("we", "our", or "us") collects when you use the XCeleration mobile app (the "App"), how it is used, and the choices you have.</p>
+            <p>XCeleration helps cross country coaches run races: a coach sets up teams and races, assistants time the finish and record bib numbers on their own phones, and the coach puts the results together.</p>
+            <h3 id="information-we-collect">Information We Collect</h3>
+            <h4>Account information</h4>
+            <ul>
+                <li><strong>Email address and password</strong>: When you create an account, we store your email address and a securely hashed password with our backend provider, Supabase. We never see your password.</li>
+                <li><strong>Display name</strong>: If you add a name to your profile, we store it with your email address.</li>
+            </ul>
+            <h4>Race information you enter</h4>
+            <ul>
+                <li><strong>Teams, runners and races</strong>: Coaches enter team names and colours, runners' names, grades and bib numbers, race details (name, date, location, distance), finish times and results.</li>
+                <li><strong>Where it is kept</strong>: This information is stored on your phone. When you are signed in, it is also saved to your account in the cloud (Supabase), so you can use more than one phone and keep your races if you change phones. Only you can read the race information saved to your account.</li>
+            </ul>
+            <h4>Runners are usually students</h4>
+            <p>Most runners are students, and many are under 18. Their names, grades, bib numbers and times are entered by their coach, not by the runners themselves. The App is meant for coaches and their helpers and is not directed to children under 13. Coaches should only enter runner information they are allowed to use for their team. If you are a parent or runner and want information about you removed, contact the coach or email us at the address below.</p>
+            <h4>Camera</h4>
+            <p>With your permission, the App uses the camera only to scan a QR code on another phone, to connect the two phones. Camera images are processed on your phone and are not saved or sent anywhere.</p>
+            <h4>Microphone and voice entry</h4>
+            <p>With your permission, the Bib Recorder lets you say bib numbers instead of typing them. Speech is turned into numbers on your phone using a speech model the App downloads once (from Hugging Face, a public model host). Recordings are kept only in temporary storage on your phone while they are being recognized, are overwritten each time, and are never uploaded or shared. You can turn voice entry off in the Bib Recorder at any time.</p>
+            <h4>Files you choose to import</h4>
+            <p>With your permission, you can pick a file, such as a roster spreadsheet, to import runners. The App only reads the file you choose. It does not look through or upload your photos or other files.</p>
+            <h4>Google Drive and Google Sheets</h4>
+            <p>If you choose to import a roster from Google Sheets or export results to Google Sheets, you sign in with your Google account and grant access. XCeleration requests only Google's most limited Drive permission, which lets it:</p>
+            <ul>
+                <li>open the spreadsheets you pick in the Google file picker, and</li>
+                <li>create and update the results spreadsheets it makes for you.</li>
+            </ul>
+            <p>It cannot see or change any other files in your Google Drive. We do not store your Google password, and spreadsheet contents are used only to import your runners or export your results.</p>
+            <p>XCeleration's use and transfer of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including the Limited Use requirements. You can remove XCeleration's access at any time in your <a href="https://myaccount.google.com/permissions">Google Account settings</a>.</p>
+            <h4>Crash and error reports</h4>
+            <p>To find and fix bugs, the App sends crash and error reports to Sentry, our error-monitoring provider. A report includes technical details such as the error, the device model, the operating system version and the App version, plus limited performance data. We do not attach your name or email address to these reports, and they are not used for advertising.</p>
+            <h3 id="how-phones-share-race-information">How Phones Share Race Information</h3>
+            <p>Coaches, timers and bib recorders pass races, finish times and bib numbers between nearby phones. This goes directly from phone to phone over Bluetooth or Wi-Fi, after the phones are connected (for example, by scanning a QR code). It does not go through our servers, and nothing is shared unless someone on each phone chooses to send or receive.</p>
+            <p>When you share results (for example, as a PDF or text), the App uses your phone's share sheet, and you choose who receives them.</p>
+            <h3 id="spectator-accounts-and-linked-coaches">Spectator Accounts and Linked Coaches</h3>
+            <p>A spectator, such as a parent, can link their account to a coach by entering the coach's email address. Once linked, the coach and the spectator can see each other's email address and display name. Linking does not give the spectator access to the coach's teams, runners or races. The coach or the spectator can remove the link at any time.</p>
+            <h3 id="how-we-use-information">How We Use Information</h3>
+            <p>We use the information described above only to:</p>
+            <ul>
+                <li>run the App and its features, such as timing, bib recording, results and sharing,</li>
+                <li>save your races to your account and keep your phones in sync,</li>
+                <li>fix bugs and keep the App working reliably, and</li>
+                <li>keep your account secure.</li>
+            </ul>
+            <p>We do not sell your information, use it for advertising, or share it with data brokers.</p>
+            <h3 id="service-providers">Service Providers</h3>
+            <p>We use a small number of providers to run the App. Each receives only what it needs:</p>
+            <ul>
+                <li><strong>Supabase</strong>: account sign-in and cloud storage of your races.</li>
+                <li><strong>Sentry</strong>: crash and error reports.</li>
+                <li><strong>Google</strong>: only if you use Google Sheets import or export.</li>
+                <li><strong>Hugging Face</strong>: hosts the speech model the App downloads for voice entry. Downloading it shares only standard connection information, such as your IP address.</li>
+            </ul>
+            <p>We may also disclose information if required by law or to protect the rights and safety of our users or others.</p>
+            <h3 id="keeping-and-deleting-your-information">Keeping and Deleting Your Information</h3>
+            <ul>
+                <li><strong>On your phone</strong>: Race information stays on your phone until you delete it or remove the App.</li>
+                <li><strong>In your account</strong>: Race information stays in your account until you delete it. When you delete a race, it is removed from your phones and marked as deleted in your account.</li>
+                <li><strong>Deleting your account</strong>: You can delete your account from Settings in the App. This permanently erases your account, profile, teams, runners, races and results from our servers, and removes any links to spectators or coaches. You can also email us to ask for your account to be deleted.</li>
+            </ul>
+            <h3 id="security">Security</h3>
+            <p>Information sent between the App and our servers is encrypted in transit, and each account can only read its own race information. No system is perfectly secure, so we cannot guarantee absolute security.</p>
+            <h3 id="your-choices-and-rights">Your Choices and Rights</h3>
+            <p>You can:</p>
+            <ul>
+                <li>view and change your teams, runners and races in the App,</li>
+                <li>delete races, or delete your whole account, in the App,</li>
+                <li>turn camera, microphone and local network access on or off in your phone's settings,</li>
+                <li>turn voice entry off in the Bib Recorder,</li>
+                <li>remove XCeleration's access to your Google account, and</li>
+                <li>contact us to ask what information we hold about you, or to have it corrected or deleted.</li>
+            </ul>
+            <h4>California privacy rights</h4>
+            <p>California residents may have additional rights under the California Consumer Privacy Act (CCPA), including the right to know about and delete personal information. We do not sell or share personal information as those terms are defined in the CCPA. To make a request, email us at the address below.</p>
+            <h3 id="international-data-transfers">International Data Transfers</h3>
+            <p>Our service providers may store and process information in countries other than the one you live in, which may have different data protection laws.</p>
+            <h3 id="changes-to-this-privacy-policy">Changes to This Privacy Policy</h3>
+            <p>We may update this Privacy Policy from time to time. When we do, we will post the new version on this page and update the effective date. If a change is significant, we will also take reasonable steps to let you know, such as a notice in the App.</p>
+            <h3 id="contact-us">Contact Us</h3>
+            <p>If you have any questions about this Privacy Policy or your information, email us at <a href="mailto:xceleration.app@gmail.com">xceleration.app@gmail.com</a>.</p>
+            <a class="back-to-top" href="#top">Back to top</a>
+        </article>
+    </div>
+</main>
+<footer class="site-footer">
+    <div class="wrap">
+        <span>&copy; 2026 XCeleration</span>
+        <nav aria-label="Footer">
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms</a>
+            <a href="/support.html">Support</a>
+            <a href="mailto:xceleration.app@gmail.com">xceleration.app@gmail.com</a>
+        </nav>
+    </div>
 </footer>
+</body>
 </html>

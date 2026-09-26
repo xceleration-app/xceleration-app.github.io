@@ -1,50 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- head-widget: Support Page -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Support - XCeleration</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <meta name="description" content="Get help with XCeleration: contact us, who does what, and common questions.">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="/images/icon.png">
     <link rel="stylesheet" href="/style.css">
-    <!-- end head-widget -->
 </head>
 <body>
-    <!-- nav-widget: Support Page -->
-    <header>
-        <h1>XCeleration</h1>
-    </header>
-    <nav>
-        <a href="/index.html" class="nav-link">Home</a>
-        <a href="/privacy-policy.html" class="nav-link">Privacy Policy</a>
-        <a href="/terms.html" class="nav-link">Terms of Service</a>
-        <a href="/support.html" class="nav-link" style="font-weight:bold; text-decoration:underline;">Support</a>
-    </nav>
-    <div class="tagline">We're here to help you with XCeleration!</div>
-    <!-- end nav-widget -->
-    <main>
-        <h2>Contact Support</h2>
-        <p><strong>Email:</strong> <a href="mailto:xceleration.app@gmail.com" class="contact-link">xceleration.app@gmail.com</a></p>
-        <p>For any questions, technical issues, or feedback regarding the XCeleration app, please contact our support team. We strive to respond to all inquiries promptly and professionally.</p>
-        <section class="faq-section">
-            <h2>Frequently Asked Questions (FAQs)</h2>
+<header class="site-header">
+    <div class="wrap">
+        <a class="brand" href="/index.html"><img src="/images/icon.png" alt="">XCeleration</a>
+        <nav class="site-nav" aria-label="Main">
+            <a href="/index.html">Home</a>
+            <a href="/privacy-policy.html">Privacy</a>
+            <a href="/terms.html">Terms</a>
+            <a href="/support.html" aria-current="page">Support</a>
+        </nav>
+    </div>
+</header>
+<main>
+    <div class="wrap doc">
+        <div class="page-title">
+            <h1>Support</h1>
+            <p>We're here to help you get the most out of XCeleration.</p>
+        </div>
+
+        <section class="card">
+            <h3 id="contact">Contact us</h3>
+            <p>Email <a href="mailto:xceleration.app@gmail.com">xceleration.app@gmail.com</a> with any question, problem or idea. We read every message and reply as soon as we can.</p>
+            <div class="button-row">
+                <a class="button" href="https://forms.gle/SLZtWN9QGzUNwAYU7" target="_blank" rel="noopener">Report a problem</a>
+                <a class="button secondary" href="https://forms.gle/AxhjL9uYCxL7AXZJ9" target="_blank" rel="noopener">Ask for help</a>
+                <a class="button secondary" href="https://forms.gle/EafGp1Eov91KYGkJ8" target="_blank" rel="noopener">Share feedback</a>
+            </div>
+        </section>
+
+        <section class="card">
+            <h3 id="roles">Who does what</h3>
+            <p>Each person picks their role when they open the app.</p>
+            <ul>
+                <li><strong>Coach</strong>: sets up teams, runners and races, sends the race to helpers, then collects and saves the results.</li>
+                <li><strong>Timer</strong>: stands at the finish and taps Log Finish once for every runner who crosses the line.</li>
+                <li><strong>Bib Recorder</strong>: stands just past the finish and records each runner's bib number in the order they finished, by voice or by typing.</li>
+                <li><strong>Spectator</strong>: receives the results from the coach's phone to follow along.</li>
+            </ul>
+        </section>
+
+        <section class="card faq">
+            <h3 id="faq">Common questions</h3>
             <details>
-                <summary><strong>I am confused about how to use the app. How can I get help?</strong></summary>
-                <p>To get help with using the app, either fill out <a href="https://forms.gle/AxhjL9uYCxL7AXZJ9" target="_blank">this form</a> or reach out to our support team at <a href="mailto:xceleration.app@gmail.com">xceleration.app@gmail.com</a>. We are happy to assist with any questions about app functionality.</p>
+                <summary>Do we need internet at the race?</summary>
+                <p>No. Phones share races, times and bib numbers directly with each other. Internet is only used to save races to your account and keep your phones in sync, and that happens whenever you're back online.</p>
             </details>
             <details>
-                <summary><strong>I am experiencing an issue or bug. What should I do?</strong></summary>
-                <p>If you encounter any technical issues or bugs, please either fill out <a href="https://forms.gle/SLZtWN9QGzUNwAYU7" target="_blank">this form</a> or email us a detailed description of the issue at <a href="mailto:xceleration.app@gmail.com">xceleration.app@gmail.com</a>. Our support team will investigate and work to resolve your issue as quickly as possible.</p>
+                <summary>The phones can't find each other. What should I check?</summary>
+                <ul>
+                    <li>Keep the phones close together, with Bluetooth and Wi-Fi turned on.</li>
+                    <li>Make sure XCeleration is allowed to use Local Network and the Camera, in your phone's Settings under XCeleration.</li>
+                    <li>Scan the QR code on the other phone again.</li>
+                </ul>
             </details>
             <details>
-                <summary><strong>How can I provide feedback or suggest improvements?</strong></summary>
-                <p>We value your feedback! Please fill out <a href="https://forms.gle/EafGp1Eov91KYGkJ8" target="_blank">this form</a> or email any suggestions or feedback to <a href="mailto:xceleration.app@gmail.com">xceleration.app@gmail.com</a>. Your input helps us improve the XCeleration experience for everyone.</p>
+                <summary>The timer missed a runner, or tapped twice. Is the race ruined?</summary>
+                <p>No. The timer can tap Counts differ? and choose Missed one or Extra tap. When the coach loads the results, the app shows where the times don't match the finishers and walks you through fixing it, with tips on how to decide.</p>
+            </details>
+            <details>
+                <summary>Voice entry isn't working.</summary>
+                <ul>
+                    <li>Allow the microphone for XCeleration in your phone's Settings.</li>
+                    <li>The first time you use voice, the app downloads its speech model (about 28 MB). Do this before race day, on Wi-Fi.</li>
+                    <li>You can always switch to typing in the Bib Recorder.</li>
+                </ul>
+            </details>
+            <details>
+                <summary>How do I fix a result after saving?</summary>
+                <p>Open the race, go to the Results tab and tap Edit.</p>
+            </details>
+            <details>
+                <summary>How do I share results?</summary>
+                <p>On a finished race, tap Share Results. You can send a PDF, export to Google Sheets, or send the results to spectators' phones nearby.</p>
+            </details>
+            <details>
+                <summary>How do I delete my account?</summary>
+                <p>Go to Settings in the app and tap Delete Account. This permanently erases your account and the races saved to it. See our <a href="/privacy-policy.html">Privacy Policy</a> for details.</p>
             </details>
         </section>
-    </main>
-    <footer>
-        <p>2025 XCeleration App</p>
-    </footer>
+    </div>
+</main>
+<footer class="site-footer">
+    <div class="wrap">
+        <span>&copy; 2026 XCeleration</span>
+        <nav aria-label="Footer">
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms</a>
+            <a href="/support.html">Support</a>
+            <a href="mailto:xceleration.app@gmail.com">xceleration.app@gmail.com</a>
+        </nav>
+    </div>
+</footer>
 </body>
 </html>
